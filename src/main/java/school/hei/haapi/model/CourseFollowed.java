@@ -19,12 +19,10 @@ public class CourseFollowed {
   private String id;
 
   @ManyToOne
-  @MapsId("id")
   @JoinColumn(name = "student_id")
   private User student;
 
   @ManyToOne
-  @MapsId("courseId")
   @JoinColumn(name = "course_id")
   private Course course;
 
