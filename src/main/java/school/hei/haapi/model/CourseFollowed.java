@@ -1,14 +1,11 @@
 package school.hei.haapi.model;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import school.hei.haapi.endpoint.rest.model.CourseStatus;
 
 @Entity
@@ -31,5 +28,7 @@ public class CourseFollowed {
   @JoinColumn(name = "course_id")
   private Course course;
 
+  @Type(type = "psql_enum")
+  @Enumerated(EnumType.STRING)
   private CourseStatus status;
 }
