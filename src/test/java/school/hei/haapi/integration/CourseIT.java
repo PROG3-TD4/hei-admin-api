@@ -19,6 +19,7 @@ import school.hei.haapi.endpoint.rest.client.ApiClient;
 import school.hei.haapi.endpoint.rest.client.ApiException;
 import school.hei.haapi.endpoint.rest.model.Course;
 import school.hei.haapi.endpoint.rest.model.CourseStatus;
+import school.hei.haapi.endpoint.rest.model.CrupdateCourse;
 import school.hei.haapi.endpoint.rest.model.EnableStatus;
 import school.hei.haapi.endpoint.rest.model.Fee;
 import school.hei.haapi.endpoint.rest.model.Teacher;
@@ -98,6 +99,26 @@ class CourseIT {
         .totalHours(150);
   }
 
+  private CrupdateCourse new_course(){
+    return new CrupdateCourse()
+        .id("course3_id")
+        .code("SYS1")
+        .name("Systeme d'exploitation")
+        .credits(10)
+        .totalHours(200)
+        .mainTeacherId("teacher1_id");
+  }
+
+  private CrupdateCourse to_be_updated(){
+    return new CrupdateCourse()
+        .id("course1_id")
+        .code("PROG2")
+        .name("Base de données")
+        .credits(10)
+        .totalHours(200)
+        .mainTeacherId("teacher1_id");
+  }
+
   private CourseFollowedRest courseToUpdate(){
     return CourseFollowedRest.builder()
             .course_id("course2_id")
@@ -139,6 +160,17 @@ class CourseIT {
     List<CourseFollowedRest> courseToUpdate = List.of(courseToUpdate());
     List<Course> coursesUpdated = List.of(student1_unlinked());
   }
+  @Test
+  void crupdate_courses_ok () throws ApiException{
+    ApiClient teacher1 = anApiClient(TEACHER1_TOKEN);
+    TeachingApi api = new TeachingApi(teacher1);
+    List<Course> toBeCreated = api.crupdateCourses(List.of(new_course()));
+    List<Course> toBeUpdated = api.crupdateCourses(List.of(to_be_updated()));
+
+    log.info("toBeCreated: {}", toBeUpdated);
+    log.info("toBeUpdated: {}", toBeUpdated);
+  }
+
   static class ContextInitializer extends AbstractContextInitializer {
     public static final int SERVER_PORT = anAvailableRandomPort();
 

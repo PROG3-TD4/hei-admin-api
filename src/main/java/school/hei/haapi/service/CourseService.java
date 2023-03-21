@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import school.hei.haapi.endpoint.rest.mapper.CourseMapper;
 import school.hei.haapi.endpoint.rest.model.CourseStatus;
+import school.hei.haapi.endpoint.rest.model.CrupdateCourse;
+import school.hei.haapi.model.Course;
 import school.hei.haapi.model.BoundedPageSize;
 import school.hei.haapi.model.Course;
 import school.hei.haapi.model.CourseFollowed;
@@ -21,12 +23,19 @@ import school.hei.haapi.repository.CourseRepository;
 @AllArgsConstructor
 public class CourseService {
   private final CourseFollowedRepository courseFollowedRepository;
+  private final CourseMapper courseMapper;
   private final CourseRepository courseRepository;
 
-  private final CourseMapper courseMapper;
   public List<CourseFollowed> getCourseFollowedByOneStudent(String studentId,
                                                             CourseStatus status) {
     return courseFollowedRepository.findAllByStudentIdAndStatus(studentId, status);
+  }
+
+  public List<Course> crupdateCourse(List<CrupdateCourse> toCrupdate){
+    List<Course> toDomain = toCrupdate.stream().map(
+        course -> courseMapper.toDomain(course)
+    ).collect(Collectors.toUnmodifiableList());
+    return courseRepository.saveAll(toDomain);
   }
 
   public List<Course> getAllCourses(PageFromOne page, BoundedPageSize pageSize){
