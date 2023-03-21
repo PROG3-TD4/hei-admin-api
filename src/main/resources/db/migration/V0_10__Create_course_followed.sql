@@ -8,7 +8,7 @@ end
 $$;
 
 create table if not exists "course_followed"(
-    id_course_followed varchar constraint course_pk primary key default uuid_generate_v4(),
+    id_course_followed varchar constraint course_followed_pk primary key default uuid_generate_v4(),
     user_id           varchar                  not null
     constraint course_followed_user_id_fk references "user"(id),
     course_id         varchar                  not null
